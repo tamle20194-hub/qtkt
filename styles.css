@@ -8,3 +8,8 @@ html[data-theme="dark"]{color-scheme:dark;--canvas:#071522;--surface:#0d2232;--s
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 @media(forced-colors:active){.nav a.active,.badge,.primary-button{border:1px solid ButtonText}.status-dot{border:1px solid CanvasText}}
 @media print{.sidebar,.topbar,.toolbar,.pagination,.back,.button-row{display:none!important}.workspace{margin:0}.content{padding:0}.panel,.table-wrap{box-shadow:none;border-color:#999}body{background:#fff;color:#000}}
+
+/* Supabase integration additions */
+a.card{display:block;text-decoration:none;color:var(--text);transition:transform .18s,box-shadow .18s,border-color .18s}
+a.card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--cyan-500)}
+.primary-button{min-height:44px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none}

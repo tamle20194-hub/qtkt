@@ -1,6 +1,6 @@
 {
   "name": "kho-chuyen-mon-115",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "type": "module",
   "description": "Ứng dụng tra cứu chuyên môn Bệnh viện Nhân dân 115",
@@ -12,5 +12,7 @@
     "validate:data": "node scripts/validate-data.mjs",
     "check": "node scripts/check-syntax.mjs"
   },
-  "engines": { "node": ">=20" }
+  "engines": {
+    "node": ">=20"
+  }
 }
