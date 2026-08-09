@@ -8,5 +8,5 @@ export const SUPABASE_PUBLISHABLE_KEY =
   'sb_publishable_bdYQjvR_VVB2vgNtTRf4AQ_iKSi_KAT';
 
 export const DATA_PAGE_SIZE = 1000;
-export const DATA_CACHE_NAME = 'kho115-supabase-data-v1';
-export const DATA_CACHE_PATH = './__qtkt_supabase_dataset_v1__.json';
+export const DATA_CACHE_NAME = 'kho115-supabase-data-v2';
+export const DATA_CACHE_PATH = './__qtkt_supabase_dataset_v2__.json';

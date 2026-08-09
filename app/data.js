@@ -58,6 +58,22 @@ const TABLES = {
       'duration',
     ].join(','),
   },
+  pdfSources: {
+    name: 'procedure_pdf_sources',
+    select: [
+      'code',
+      'target_type',
+      'target_code',
+      'title',
+      'organization',
+      'decision_number',
+      'decision_date',
+      'pdf_url',
+      'source_page_url',
+      'verified_at',
+      'is_primary',
+    ].join(','),
+  },
 };
 
 const RETRYABLE_STATUS = new Set([429, 502, 503, 504]);
@@ -192,6 +208,22 @@ export function mapBvDocumentRow(row) {
   };
 }
 
+export function mapPdfSourceRow(row) {
+  return {
+    code: String(row.code ?? ''),
+    targetType: row.target_type ?? '',
+    targetCode: String(row.target_code ?? ''),
+    title: row.title ?? '',
+    organization: row.organization ?? '',
+    decisionNumber: row.decision_number ?? '',
+    decisionDate: row.decision_date ?? '',
+    pdfUrl: row.pdf_url ?? '',
+    sourcePageUrl: row.source_page_url ?? '',
+    verifiedAt: row.verified_at ?? '',
+    isPrimary: row.is_primary === true,
+  };
+}
+
 export function buildDashboard(technical, bytDocs, bvDocs) {
   const approved = technical.filter((item) => item.approved).length;
   const withProcess = technical.filter((item) => item.hasProcess).length;
@@ -213,6 +245,9 @@ function validateDataset(data) {
   }
   if (!Array.isArray(data.bytDocs) || !Array.isArray(data.bvDocs)) {
     throw new Error('Dataset không có kho quy trình kỹ thuật');
+  }
+  if (!Array.isArray(data.pdfSources)) {
+    data.pdfSources = [];
   }
   if (data.technical.length === 0) {
     throw new Error('Danh mục kỹ thuật đang trống');
@@ -248,21 +283,24 @@ async function writeCache(data) {
 
 async function loadRemoteData(onProgress) {
   const technicalPromise = fetchAllRows(TABLES.technical, onProgress);
-  const [technicalRows, bytRows, bvRows] = await Promise.all([
+  const [technicalRows, bytRows, bvRows, pdfSourceRows] = await Promise.all([
     technicalPromise,
     fetchAllRows(TABLES.bytDocs, onProgress),
     fetchAllRows(TABLES.bvDocs, onProgress),
+    fetchAllRows(TABLES.pdfSources, onProgress),
   ]);
 
   const technical = technicalRows.map(mapTechnicalRow);
   const bytDocs = bytRows.map(mapBytDocumentRow);
   const bvDocs = bvRows.map(mapBvDocumentRow);
+  const pdfSources = pdfSourceRows.map(mapPdfSourceRow);
 
   return validateDataset({
     dashboard: buildDashboard(technical, bytDocs, bvDocs),
     technical,
     bytDocs,
     bvDocs,
+    pdfSources,
     meta: {
       source: 'supabase',
       loadedAt: new Date().toISOString(),

@@ -1,4 +1,5 @@
 import { loadData } from './data.js';
+import { resolvePdfSources, safeHttpsUrl } from './pdf-sources.js';
 
 const main = document.getElementById('main-content');
 const breadcrumb = document.getElementById('breadcrumb');
@@ -123,6 +124,71 @@ function pageFooter() {
     <footer class="footer">
       Nguồn dữ liệu: Supabase • Cập nhật từ Kho Chuyên môn 115
     </footer>
+  `;
+}
+
+function pdfIcon() {
+  return `
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M6.75 2.5h7.1L19.5 8v11.25a2.25 2.25 0 0 1-2.25 2.25H6.75a2.25 2.25 0 0 1-2.25-2.25V4.75A2.25 2.25 0 0 1 6.75 2.5Zm6.5 1.8v4.3h4.42l-4.42-4.3ZM8 12.25h8v-1.5H8v1.5Zm0 3h8v-1.5H8v1.5Zm0 3h5.25v-1.5H8v1.5Z"/>
+    </svg>
+  `;
+}
+
+function renderPdfSources({ technical = null, document = null, documentType = '' } = {}) {
+  const sources = resolvePdfSources({
+    pdfSources: DATA.pdfSources,
+    technical,
+    document,
+    documentType,
+  });
+
+  if (!sources.length) {
+    return `
+      <div class="pdf-source-empty" role="status">
+        <span class="pdf-source-icon" aria-hidden="true">${pdfIcon()}<small>PDF</small></span>
+        <span>
+          <strong>Chưa có bản PDF được đối chiếu</strong>
+          <small>Sẽ hiển thị tại đây khi tìm được tài liệu từ nguồn chính thức.</small>
+        </span>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="pdf-source-list" aria-label="Toàn văn quy trình PDF">
+      ${sources
+        .map((source, index) => {
+          const pdfUrl = safeHttpsUrl(source.pdfUrl);
+          const sourcePageUrl = safeHttpsUrl(source.sourcePageUrl);
+          const label =
+            sources.length > 1
+              ? `Xem toàn văn PDF - ${source.title}`
+              : 'Xem toàn văn quy trình (.pdf)';
+          const metadata = [source.organization, source.decisionNumber]
+            .filter(Boolean)
+            .join(' • ');
+
+          return `
+            <div class="pdf-source-item">
+              <a class="pdf-source-link" href="${escapeHtml(pdfUrl)}" target="_blank" rel="noopener noreferrer"
+                aria-label="${escapeHtml(label)}; mở trong thẻ mới">
+                <span class="pdf-source-icon" aria-hidden="true">${pdfIcon()}<small>PDF</small></span>
+                <span class="pdf-source-copy">
+                  <strong>${escapeHtml(label)}</strong>
+                  <span>${escapeHtml(source.title)}</span>
+                  ${metadata ? `<small>${escapeHtml(metadata)}</small>` : ''}
+                </span>
+                <span class="pdf-external" aria-hidden="true">↗</span>
+              </a>
+              ${sourcePageUrl
+                ? `<a class="source-page-link" href="${escapeHtml(sourcePageUrl)}" target="_blank" rel="noopener noreferrer">Đối chiếu trang nguồn${sources.length > 1 ? ` ${index + 1}` : ''}</a>`
+                : ''}
+            </div>
+          `;
+        })
+        .join('')}
+    </div>
   `;
 }
 
@@ -415,6 +481,7 @@ function renderTechnicalDetail(code) {
             <div class="meta-item"><small>Mã nguồn</small><strong class="code">${escapeHtml(item.sourceCode || '—')}</strong></div>
             <div class="meta-item"><small>Trạng thái QTKT</small><strong>${item.hasProcess ? 'Có' : 'Chưa có'}</strong></div>
           </div>
+          ${renderPdfSources({ technical: item, document: linkedDocument, documentType: linkedType })}
           <p class="body-copy spaced">${escapeHtml(contentValue(item.sourceName))}</p>
           ${linkedDocument
             ? `<div class="button-row"><a class="linkbtn" href="#/${linkedType}/${encodeURIComponent(linkedDocument.code)}">Mở quy trình nguồn</a></div>`
@@ -503,6 +570,7 @@ function renderDocumentDetail(type, code) {
         <span class="info-chip">Mã nguồn: ${escapeHtml(document.sourceCode || '—')}</span>
         ${isByt ? `<span class="info-chip">Tác giả: ${escapeHtml(document.author || '—')}</span>` : ''}
       </div>
+      ${renderPdfSources({ document, documentType: type })}
       ${isByt ? docSection('Đại cương', document.general) : ''}
       ${docSection('Chỉ định', document.indication)}
       ${docSection('Chống chỉ định', document.contra)}
