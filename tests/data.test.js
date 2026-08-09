@@ -4,6 +4,7 @@ import {
   buildDashboard,
   mapBvDocumentRow,
   mapBytDocumentRow,
+  mapPdfSourceRow,
   mapTechnicalRow,
 } from '../app/data.js';
 
@@ -85,4 +86,25 @@ test('dashboard được tính từ dữ liệu thay vì lưu số liệu cứng
     bytProcessCount: 1,
     bvProcessCount: 1,
   });
+});
+
+test('ánh xạ nguồn PDF giữ nguyên mã nhóm và metadata quyết định', () => {
+  const result = mapPdfSourceRow({
+    code: 'source_group:01.1904:01',
+    target_type: 'source_group',
+    target_code: '01.1904',
+    title: 'QTKT Hồi sức',
+    organization: 'Bộ Y tế',
+    decision_number: '1904/QĐ-BYT',
+    decision_date: '2014-05-30',
+    pdf_url: 'https://example.org/1904.pdf',
+    source_page_url: 'https://example.org/1904',
+    verified_at: '2026-08-09T00:00:00Z',
+    is_primary: true,
+  });
+
+  assert.equal(result.targetType, 'source_group');
+  assert.equal(result.targetCode, '01.1904');
+  assert.equal(result.decisionNumber, '1904/QĐ-BYT');
+  assert.equal(result.isPrimary, true);
 });

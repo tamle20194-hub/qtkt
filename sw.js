@@ -1,4 +1,4 @@
-const VERSION = 'kho115-v2.1.0';
+const VERSION = 'kho115-v2.2.0';
 const STATIC_CACHE = `${VERSION}-static`;
 const SHELL = [
   './',
@@ -8,6 +8,7 @@ const SHELL = [
   './manifest.webmanifest',
   './app/config.js',
   './app/data.js',
+  './app/pdf-sources.js',
   './app/main.js',
   './assets/icons/icon.svg',
   './assets/icons/icon-maskable.svg',

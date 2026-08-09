@@ -38,6 +38,7 @@ server.listen(0, '127.0.0.1', async () => {
       '/app/main.js',
       '/app/data.js',
       '/app/config.js',
+      '/app/pdf-sources.js',
       '/sw.js',
       '/manifest.webmanifest',
       '/assets/icons/icon.svg',
