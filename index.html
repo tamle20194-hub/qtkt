@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="vi" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="Kho Chuyên môn 115: tra cứu danh mục kỹ thuật, quy trình và hồ sơ áp dụng của Bệnh viện Nhân dân 115.">
+  <meta name="theme-color" content="#082f49">
+  <meta name="color-scheme" content="light dark">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Kho 115">
+  <title>Kho Chuyên môn 115</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./assets/icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./assets/icons/icon.svg">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Chuyển đến nội dung chính</a>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Điều hướng chính">
+      <a class="brand" href="#/home" aria-label="Kho Chuyên môn 115 - Trang chủ">
+        <span class="brand-mark" aria-hidden="true"><span>115</span></span>
+        <span class="brand-copy"><strong>KHO CHUYÊN MÔN</strong><small>Bệnh viện Nhân dân 115</small></span>
+      </a>
+      <nav class="nav" id="primary-nav">
+        <p class="nav-title">Không gian làm việc</p>
+        <a href="#/home" data-page="home"><span class="nav-icon" aria-hidden="true">⌂</span><span>Tổng quan</span></a>
+        <a href="#/technical" data-page="technical"><span class="nav-icon" aria-hidden="true">⌕</span><span>Danh mục kỹ thuật</span></a>
+        <p class="nav-title">Kho tài liệu</p>
+        <a href="#/byt" data-page="byt"><span class="nav-icon" aria-hidden="true">▤</span><span>Tài liệu Bộ Y tế</span></a>
+        <a href="#/bv" data-page="bv"><span class="nav-icon" aria-hidden="true">✚</span><span>Quy trình BV 115</span></a>
+        <a href="#/records" data-page="records"><span class="nav-icon" aria-hidden="true">✓</span><span>Hồ sơ áp dụng</span></a>
+        <p class="nav-title">Hệ thống</p>
+        <a href="#/about" data-page="about"><span class="nav-icon" aria-hidden="true">i</span><span>Giới thiệu</span></a>
+      </nav>
+      <div class="sidebar-status"><span class="status-dot" id="network-dot"></span><span id="network-label">Đang kiểm tra kết nối</span></div>
+    </aside>
+    <div class="workspace">
+      <header class="topbar">
+        <div><p class="eyebrow">HỆ THỐNG TRI THỨC LÂM SÀNG</p><p class="breadcrumb" id="breadcrumb">Tổng quan</p></div>
+        <div class="top-actions">
+          <button class="icon-button" id="install-app" type="button" hidden>↓ <span>Cài ứng dụng</span></button>
+          <button class="icon-button" id="theme-toggle" type="button" aria-label="Đổi giao diện sáng tối" aria-pressed="false"><span aria-hidden="true">◐</span><span class="action-label">Giao diện</span></button>
+          <span class="user-pill"><span class="avatar" aria-hidden="true">115</span><span>Nhân viên y tế</span></span>
+        </div>
+      </header>
+      <div class="app-notice" id="app-notice" role="status" aria-live="polite" hidden></div>
+      <main id="main-content" class="content" tabindex="-1"><div class="loading-card"><span class="loader" aria-hidden="true"></span><h1>Đang chuẩn bị kho dữ liệu</h1><p>Đang nạp danh mục chuyên môn...</p></div></main>
+    </div>
+  </div>
+  <noscript><div class="noscript">Ứng dụng cần JavaScript để tra cứu dữ liệu. Vui lòng bật JavaScript và tải lại trang.</div></noscript>
+  <script type="module" src="./app/main.js"></script>
+</body>
+</html>

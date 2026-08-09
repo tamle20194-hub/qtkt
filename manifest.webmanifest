@@ -1,0 +1,43 @@
+{
+  "name": "Kho Chuyên môn 115",
+  "short_name": "Kho 115",
+  "description": "Tra cứu danh mục kỹ thuật và quy trình chuyên môn Bệnh viện Nhân dân 115.",
+  "id": "./",
+  "start_url": "./#/home",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#071522",
+  "theme_color": "#082f49",
+  "lang": "vi",
+  "categories": [
+    "medical",
+    "productivity"
+  ],
+  "icons": [
+    {
+      "src": "./assets/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icons/icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Tra cứu kỹ thuật",
+      "url": "./#/technical",
+      "icons": [
+        {
+          "src": "./assets/icons/icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ]
+}
