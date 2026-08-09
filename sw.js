@@ -1,1 +1,75 @@
-const VERSION='kho115-v2.0.0';const STATIC=`${VERSION}-static`;const DATA=`${VERSION}-data`;const SHELL=['./','./index.html','./styles.css','./offline.html','./manifest.webmanifest','./app/main.js','./app/data.js','./app/state.js','./app/search.js','./app/search-core.js','./app/preferences.js','./app/pwa.js','./app/analytics.js','./app/utils/format.js','./app/components/tables.js','./app/components/document-content.js','./app/pages/home.js','./app/pages/technical.js','./app/pages/documents.js','./app/pages/records.js','./app/pages/about.js','./assets/icons/icon.svg','./assets/icons/icon-maskable.svg'];self.addEventListener('install',event=>{event.waitUntil(caches.open(STATIC).then(cache=>cache.addAll(SHELL)));self.skipWaiting()});self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>!key.startsWith(VERSION)).map(key=>caches.delete(key)))));self.clients.claim()});self.addEventListener('fetch',event=>{const request=event.request;if(request.method!=='GET'||new URL(request.url).origin!==location.origin)return;if(request.headers.get('accept')?.includes('text/html')){event.respondWith(networkFirst(request));return}if(new URL(request.url).pathname.endsWith('/data/data.json')){event.respondWith(staleData(request));return}event.respondWith(cacheFirst(request))});async function cacheFirst(request){const cached=await caches.match(request);if(cached)return cached;try{const response=await fetch(request);if(response.ok)(await caches.open(STATIC)).put(request,response.clone());return response}catch{return new Response('Không thể tải tài nguyên ngoại tuyến',{status:503})}}async function networkFirst(request){try{const response=await fetch(request);if(response.ok)(await caches.open(STATIC)).put(request,response.clone());return response}catch{return(await caches.match(request))||(await caches.match('./offline.html'))}}async function staleData(request){const cache=await caches.open(DATA);const cached=await cache.match(request);const network=fetch(request).then(response=>{if(response.ok)cache.put(request,response.clone());return response}).catch(()=>null);return cached||(await network)||new Response('{"error":"offline"}',{status:503,headers:{'Content-Type':'application/json'}})}
+const VERSION = 'kho115-v2.1.0';
+const STATIC_CACHE = `${VERSION}-static`;
+const SHELL = [
+  './',
+  './index.html',
+  './styles.css',
+  './offline.html',
+  './manifest.webmanifest',
+  './app/config.js',
+  './app/data.js',
+  './app/main.js',
+  './assets/icons/icon.svg',
+  './assets/icons/icon-maskable.svg',
+];
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(caches.open(STATIC_CACHE).then((cache) => cache.addAll(SHELL)));
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(
+        keys
+          .filter((key) => key.startsWith('kho115-v') && key !== STATIC_CACHE)
+          .map((key) => caches.delete(key)),
+      ),
+    ),
+  );
+  self.clients.claim();
+});
+
+self.addEventListener('fetch', (event) => {
+  const request = event.request;
+  if (request.method !== 'GET') return;
+
+  const url = new URL(request.url);
+  if (url.origin !== self.location.origin) return;
+
+  if (request.headers.get('accept')?.includes('text/html')) {
+    event.respondWith(networkFirst(request));
+  } else {
+    event.respondWith(cacheFirst(request));
+  }
+});
+
+async function cacheFirst(request) {
+  const cached = await caches.match(request);
+  if (cached) return cached;
+
+  try {
+    const response = await fetch(request);
+    if (response.ok) {
+      const cache = await caches.open(STATIC_CACHE);
+      cache.put(request, response.clone());
+    }
+    return response;
+  } catch {
+    return new Response('Không thể tải tài nguyên ngoại tuyến', { status: 503 });
+  }
+}
+
+async function networkFirst(request) {
+  try {
+    const response = await fetch(request);
+    if (response.ok) {
+      const cache = await caches.open(STATIC_CACHE);
+      cache.put(request, response.clone());
+    }
+    return response;
+  } catch {
+    return (await caches.match(request)) || (await caches.match('./offline.html'));
+  }
+}
