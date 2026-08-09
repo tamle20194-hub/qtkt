@@ -1,7 +1,7 @@
 {
   "name": "Kho Chuyên môn 115",
   "short_name": "Kho 115",
-  "description": "Tra cứu danh mục kỹ thuật và quy trình chuyên môn Bệnh viện Nhân dân 115.",
+  "description": "Tra cứu danh mục kỹ thuật và quy trình chuyên môn Bệnh viện Đa khoa 115.",
   "id": "./",
   "start_url": "./#/home",
   "scope": "./",

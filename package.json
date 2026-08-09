@@ -3,7 +3,7 @@
   "version": "2.1.0",
   "private": true,
   "type": "module",
-  "description": "Ứng dụng tra cứu chuyên môn Bệnh viện Nhân dân 115",
+  "description": "Ứng dụng tra cứu chuyên môn Bệnh viện Đa khoa 115",
   "scripts": {
     "serve": "python -m http.server 8000",
     "test": "npm run test:unit && npm run validate:data",
