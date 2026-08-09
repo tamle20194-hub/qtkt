@@ -5,6 +5,9 @@ Supabase project `tzcaxoleefuezhocphyh`.
 
 ## Chạy cục bộ
 
+Yêu cầu Node.js 20 trở lên và Python 3; lệnh `python` phải có trong `PATH` vì
+máy chủ cục bộ được khởi chạy bằng `python -m http.server 8000`.
+
 ```bash
 npm run serve
 ```

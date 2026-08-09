@@ -61,7 +61,13 @@ function parseHash() {
   const segments = pathPart
     .split('/')
     .filter(Boolean)
-    .map((segment) => decodeURIComponent(segment));
+    .map((segment) => {
+      try {
+        return decodeURIComponent(segment);
+      } catch {
+        return segment;
+      }
+    });
 
   return {
     page: segments[0] || 'home',

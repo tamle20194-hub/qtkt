@@ -61,15 +61,19 @@ const TABLES = {
 };
 
 const RETRYABLE_STATUS = new Set([429, 502, 503, 504]);
+const FETCH_TIMEOUT_MS = 20_000;
 
 function wait(milliseconds) {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
 
 async function fetchJson(url, attempt = 0) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
   let response;
   try {
     response = await fetch(url, {
+      signal: controller.signal,
       headers: {
         Accept: 'application/json',
         apikey: SUPABASE_PUBLISHABLE_KEY,
@@ -77,12 +81,14 @@ async function fetchJson(url, attempt = 0) {
       },
     });
   } catch (error) {
+    clearTimeout(timeoutId);
     if (attempt < 2) {
       await wait(300 * 3 ** attempt);
       return fetchJson(url, attempt + 1);
     }
     throw error;
   }
+  clearTimeout(timeoutId);
 
   if (!response.ok) {
     if (attempt < 2 && RETRYABLE_STATUS.has(response.status)) {
@@ -267,7 +273,11 @@ async function loadRemoteData(onProgress) {
 export async function loadData({ onProgress } = {}) {
   try {
     const remote = await loadRemoteData(onProgress);
-    await writeCache(remote);
+    try {
+      await writeCache(remote);
+    } catch (cacheError) {
+      console.warn('Không thể lưu cache dữ liệu:', cacheError);
+    }
     return remote;
   } catch (remoteError) {
     const cached = await readCache();

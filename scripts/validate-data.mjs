@@ -21,8 +21,11 @@ for (const [name, count] of Object.entries(expected)) {
     throw new Error(`${name}: dự kiến ${count}, thực tế ${rows?.length ?? 'không có'}`);
   }
 
-  const codes = new Set(rows.map((row) => row.code));
-  if (codes.size !== rows.length || codes.has('')) {
+  const hasInvalidCode = rows.some(
+    (row) => typeof row?.code !== 'string' || row.code.trim() === '',
+  );
+  const codes = new Set(rows.map((row) => row?.code));
+  if (hasInvalidCode || codes.size !== rows.length) {
     throw new Error(`${name}: mã trống hoặc trùng lặp`);
   }
 }
