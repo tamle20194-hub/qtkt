@@ -67,6 +67,11 @@ node scripts/build-seed-batch.mjs --dataset bvDocs --start 0 --limit 100
 
 Không cấp quyền ghi tạm thời cho trình duyệt để nhập dữ liệu.
 
+Việc nhập nội dung toàn văn từ các quyết định đã ban hành sử dụng bộ trích
+xuất có kiểm toán, bộ kiểm tra và migration đặc quyền. Xem
+[`docs/procedure-content-import.md`](docs/procedure-content-import.md) để chạy
+đúng chuỗi xuất dữ liệu → chuẩn bị văn bản → trích xuất → kiểm tra → migration.
+
 ## Ngoại tuyến
 
 Sau lần tải thành công đầu tiên, dataset Supabase được lưu trong Cache Storage.
